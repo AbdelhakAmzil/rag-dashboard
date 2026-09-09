@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { Message } from '../../shared/models/message';
 import { Conversation } from '../../shared/models/conversation';
 import { Chat } from './chat';
@@ -8,35 +8,70 @@ import { Chat } from './chat';
 })
 export class ConversationState {
   private chatService = inject(Chat);
+  private readonly storageKey = 'rag-chatbot-conversations';
+  private readonly activeIdStorageKey = 'rag-chatbot-active-id';
 
-  conversations = signal<Conversation[]>([
-    {
-      id: 'demo-1',
-      title: 'Explain RAG architecture',
-      messages: [
-        {
-          role: 'user',
-          text: 'Can you explain how a RAG (Retrieval-Augmented Generation) system works?',
-          timestamp: '10:42 AM',
-        },
-        {
-          role: 'assistant',
-          text: 'A Retrieval-Augmented Generation (RAG) system combines information retrieval with generative models to produce accurate and context-aware responses.',
-          timestamp: '10:42 AM',
-        },
-      ],
-    },
-  ]);
+  conversations = signal<Conversation[]>(this.loadFromStorage());
+  activeConversationId = signal<string>(this.loadActiveId());
 
-  activeConversationId = signal<string>('demo-1');
-
-  // computed() recalcule automatiquement dès que conversations() ou activeConversationId() change
   messages = computed<Message[]>(() => {
-    const active = this.conversations().find((c) => c.id === this.activeConversationId());
+    const active = this.conversations().find(c => c.id === this.activeConversationId());
     return active?.messages ?? [];
   });
 
   isLoading = signal(false);
+
+  constructor() {
+    effect(() => {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.conversations()));
+    });
+
+    effect(() => {
+      localStorage.setItem(this.activeIdStorageKey, this.activeConversationId());
+    });
+  }
+
+  private loadActiveId(): string {
+    const savedId = localStorage.getItem(this.activeIdStorageKey);
+    const conversations = this.loadFromStorage();
+
+    // On vérifie que l'ID sauvegardé correspond à une conversation qui existe vraiment
+    const isValid = savedId && conversations.some(c => c.id === savedId);
+
+    return isValid ? savedId! : (conversations[0]?.id ?? 'demo-1');
+  }
+
+  private loadFromStorage(): Conversation[] {
+    const saved = localStorage.getItem(this.storageKey);
+
+    if (saved) {
+      try {
+        return JSON.parse(saved) as Conversation[];
+      } catch (err) {
+        console.error('Failed to parse saved conversations:', err);
+      }
+    }
+
+    // Valeur par défaut si rien n'est sauvegardé (première visite)
+    return [
+      {
+        id: 'demo-1',
+        title: 'Explain RAG architecture',
+        messages: [
+          {
+            role: 'user',
+            text: 'Can you explain how a RAG (Retrieval-Augmented Generation) system works?',
+            timestamp: '10:42 AM',
+          },
+          {
+            role: 'assistant',
+            text: 'A Retrieval-Augmented Generation (RAG) system combines information retrieval with generative models to produce accurate and context-aware responses.',
+            timestamp: '10:42 AM',
+          },
+        ]
+      }
+    ];
+  }
 
   addMessage(message: Message) {
     this.conversations.update((current) =>
