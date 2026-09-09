@@ -1,0 +1,32 @@
+<div class="input-container">
+  <textarea
+    class="chat-textarea"
+    placeholder="Ask anything about your documents..."
+    [(ngModel)]="questionText">
+  </textarea>
+
+  <div class="input-toolbar">
+    <div class="toolbar-left">
+      <button class="tool-btn">
+        <span>📎</span> Attach
+      </button>
+      <input
+        type="file"
+        #fileInput
+        style="display: none"
+        (change)="onFileSelected($event)"
+        accept=".pdf,.docx,.txt,.html">
+
+      <button class="tool-btn" (click)="fileInput.click()">
+        <span>📁</span> Upload file
+      </button>
+      <button class="tool-btn">
+        <span>⚙️</span> Advanced
+      </button>
+    </div>
+
+    <button class="send-btn" (click)="onSend()" [disabled]="conversation.isLoading()">➤</button>
+  </div>
+</div>
+
+<p class="disclaimer">RAG Chatbot can make mistakes. Check important info.</p>

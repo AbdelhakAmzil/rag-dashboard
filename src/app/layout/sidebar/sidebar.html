@@ -1,0 +1,48 @@
+<div class="sidebar-header">
+  <div class="logo-icon">🔷</div>
+  <span class="logo-text">RAG Chatbot</span>
+</div>
+
+<button class="new-chat-btn" (click)="onNewChat()">
+  <span class="plus-icon">+</span>
+  New Chat
+</button>
+
+<div class="conversation-group">
+  <span class="group-label">Conversations</span>
+  <ul class="conversation-list">
+    @for (conv of conversation.conversations(); track conv.id) {
+      <li
+        class="conversation-item"
+        [class.active]="conv.id === conversation.activeConversationId()"
+        (click)="onSelectConversation(conv.id)">
+        {{ conv.title }}
+      </li>
+    }
+  </ul>
+</div>
+
+<div class="upgrade-card">
+  <div class="upgrade-title">
+    <span class="star-icon">⭐</span>
+    <strong>Upgrade to Pro</strong>
+  </div>
+  <p class="upgrade-text">Unlock more tokens, larger file uploads and history.</p>
+  <button class="upgrade-btn">Upgrade Now</button>
+</div>
+
+<button class="theme-toggle" (click)="uiState.toggleDarkMode()">
+  @if (uiState.isDarkMode()) {
+    ☀️ Light mode
+  } @else {
+    🌙 Dark mode
+  }
+</button>
+
+<div class="user-profile">
+  <div class="avatar">AA</div>
+  <div class="user-info">
+    <span class="user-name">Abdelhak Amzil</span>
+    <span class="user-email">abdelhak&#64;example.com</span>
+  </div>
+</div>

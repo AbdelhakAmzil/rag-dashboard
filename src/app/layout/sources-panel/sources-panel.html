@@ -1,0 +1,56 @@
+<div class="panel-header">
+  <h3>Sources</h3>
+  <span class="close-icon">✕</span>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <span class="stat-value">4</span>
+    <span class="stat-label">Sources used</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-value">12.4<small>s</small></span>
+    <span class="stat-label">Response time</span>
+  </div>
+</div>
+
+<div class="section">
+  <h4>Uploaded Documents</h4>
+  @if (documentUpload.uploadedDocuments().length === 0) {
+    <p class="no-documents">No documents uploaded yet.</p>
+  } @else {
+    <div class="document-cards">
+      @for (doc of documentUpload.uploadedDocuments(); track doc.fileName) {
+        <div class="document-card">
+          <div class="document-icon" [class]="getFileIconClass(doc.fileName)">
+            {{ getFileIcon(doc.fileName) }}
+          </div>
+          <div class="document-info">
+            <span class="document-name">{{ doc.fileName }}</span>
+            <span class="document-meta">{{ doc.chunksIndexed }} chunks · {{ doc.uploadedAt }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<div class="section">
+  <h4>Query Details</h4>
+  <div class="detail-row">
+    <span class="detail-label">Query</span>
+    <span class="detail-value">Can you explain how a RAG system works?</span>
+  </div>
+  <div class="detail-row">
+    <span class="detail-label">Intent</span>
+    <span class="detail-value">Informational</span>
+  </div>
+  <div class="detail-row">
+    <span class="detail-label">Retrieved Chunks</span>
+    <span class="detail-value">8 chunks</span>
+  </div>
+  <div class="detail-row">
+    <span class="detail-label">Model</span>
+    <span class="detail-value">gpt-4o</span>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<h2 class="chat-title">Explain RAG architecture</h2>
+
+<div class="header-actions">
+  <button class="share-btn" (click)="onShare()">
+    <span class="share-icon">⇅</span>
+    @if (justCopied()) {
+      Copied!
+    } @else {
+      Share
+    }
+  </button>
+
+  <div class="sources-toggle">
+    <span>Sources</span>
+    <label class="switch">
+      <input
+        type="checkbox"
+        [checked]="uiState.isSourcesPanelOpen()"
+        (change)="uiState.toggleSourcesPanel()">
+      <span class="slider"></span>
+    </label>
+  </div>
+</div>
