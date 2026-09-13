@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConversationState } from '../../../core/services/conversation-state';
 import { DocumentUpload } from '../../../core/services/document-upload';
+import { Notification } from '../../../core/services/notification';
 
 @Component({
   selector: 'app-chat-input',
@@ -12,6 +13,7 @@ import { DocumentUpload } from '../../../core/services/document-upload';
 export class ChatInput {
   conversation = inject(ConversationState);
   private documentUpload = inject(DocumentUpload);
+  private notification = inject(Notification);
   questionText = '';
 
   onSend() {
@@ -30,21 +32,28 @@ export class ChatInput {
       return;
     }
 
+    const alreadyUploaded = this.documentUpload
+      .uploadedDocuments()
+      .some((doc) => doc.fileName.toLowerCase() === file.name.toLowerCase());
+
+    if (alreadyUploaded) {
+      this.notification.error(`"${file.name}" has already been uploaded.`);
+      input.value = '';
+      return;
+    }
+
     this.documentUpload.uploadFile(file).subscribe({
       next: (response) => {
-        this.conversation.addMessage({
-          role: 'assistant',
-          text: `✅ File "${response.fileName}" uploaded successfully (${response.chunksIndexed} chunk(s) indexed). You can now ask questions about it.`,
-          timestamp: this.conversation.getCurrentTime(),
-        });
+        this.notification.success(
+          `"${response.fileName}" uploaded successfully (${response.chunksIndexed} chunk(s) indexed).`,
+        );
       },
       error: (err) => {
-        console.error('Upload error:', err);
-        this.conversation.addMessage({
-          role: 'assistant',
-          text: `❌ Failed to upload "${file.name}". Please try again.`,
-          timestamp: this.conversation.getCurrentTime(),
-        });
+        const message =
+          typeof err.error === 'string'
+            ? err.error
+            : `Failed to upload "${file.name}". Please try again.`;
+        this.notification.error(message);
       },
     });
 

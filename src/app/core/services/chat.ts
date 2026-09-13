@@ -9,10 +9,10 @@ import { ChatResponse } from '../../shared/models/chat-response';
 })
 export class Chat {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/chat';
+  private apiUrl = '/api/chat';
 
-  askQuestion(question: string): Observable<ChatResponse> {
-    const request: ChatRequest = { question };
+  askQuestion(question: string, conversationId: string | null): Observable<ChatResponse> {
+    const request: ChatRequest = { question, conversationId };
     return this.http.post<ChatResponse>(this.apiUrl, request);
   }
 }

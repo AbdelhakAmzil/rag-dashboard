@@ -1,0 +1,27 @@
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo">🔷 RAG Chatbot</div>
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Log in to continue to your documents.</p>
+
+    <form (ngSubmit)="submit()" class="auth-form">
+      <label class="auth-label">
+        Email
+        <input type="email" name="email" [(ngModel)]="email" class="auth-input" placeholder="you@example.com" />
+      </label>
+
+      <label class="auth-label">
+        Password
+        <input type="password" name="password" [(ngModel)]="password" class="auth-input" placeholder="••••••••" />
+      </label>
+
+      <button type="submit" class="auth-submit-btn" [disabled]="isLoading()">
+        {{ isLoading() ? 'Logging in...' : 'Log in' }}
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Don't have an account? <a routerLink="/register">Sign up</a>
+    </p>
+  </div>
+</div>

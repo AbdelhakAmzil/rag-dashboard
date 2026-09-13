@@ -42,7 +42,7 @@
 <div class="user-profile">
   <div class="avatar">AA</div>
   <div class="user-info">
-    <span class="user-name">Abdelhak Amzil</span>
-    <span class="user-email">abdelhak&#64;example.com</span>
+    <span class="user-name">{{ auth.currentUsername() }}</span>
   </div>
+  <button class="logout-btn" (click)="onLogout()" title="Log out">🚪</button>
 </div>

@@ -1,22 +1,28 @@
-import { Injectable, inject, signal, effect } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { IngestResponse } from '../../shared/models/ingest-response';
 import { UploadedDocument } from '../../shared/models/uploaded-document';
+import { DocumentApi } from './document-api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentUpload {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/documents/upload';
-  private readonly storageKey = 'rag-chatbot-uploaded-documents';
+  private documentApi = inject(DocumentApi);
+  private apiUrl = '/api/documents/upload';
 
-  uploadedDocuments = signal<UploadedDocument[]>(this.loadFromStorage());
+  uploadedDocuments = signal<UploadedDocument[]>([]);
 
   constructor() {
-    effect(() => {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.uploadedDocuments()));
+    this.refreshDocuments();
+  }
+
+  refreshDocuments() {
+    this.documentApi.list().subscribe({
+      next: (docs) => this.uploadedDocuments.set(docs),
+      error: (err) => console.error('Failed to load documents:', err),
     });
   }
 
@@ -24,31 +30,8 @@ export class DocumentUpload {
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<IngestResponse>(this.apiUrl, formData).pipe(
-      tap((response) => {
-        this.uploadedDocuments.update((current) => [
-          ...current,
-          {
-            fileName: response.fileName,
-            chunksIndexed: response.chunksIndexed,
-            uploadedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          },
-        ]);
-      }),
-    );
-  }
-
-  private loadFromStorage(): UploadedDocument[] {
-    const saved = localStorage.getItem(this.storageKey);
-
-    if (saved) {
-      try {
-        return JSON.parse(saved) as UploadedDocument[];
-      } catch (err) {
-        console.error('Failed to parse saved documents:', err);
-      }
-    }
-
-    return [];
+    return this.http
+      .post<IngestResponse>(this.apiUrl, formData)
+      .pipe(tap(() => this.refreshDocuments()));
   }
 }
