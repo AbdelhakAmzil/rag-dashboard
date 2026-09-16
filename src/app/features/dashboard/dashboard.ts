@@ -6,6 +6,7 @@ import { ChatInput } from '../chat/chat-input/chat-input';
 import { SourcesPanel } from '../../layout/sources-panel/sources-panel';
 import { UiState } from '../../core/services/ui-state';
 import { ConversationState } from '../../core/services/conversation-state';
+import { Message } from '../../shared/models/message';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,5 +20,17 @@ export class Dashboard {
 
   askQuickQuestion(question: string) {
     this.conversation.sendQuestion(question);
+  }
+
+  onEdit(message: Message, newText: string) {
+    if (message.id) {
+      this.conversation.editMessage(message.id, newText);
+    }
+  }
+
+  onRegenerate(message: Message) {
+    if (message.id) {
+      this.conversation.regenerateMessage(message.id);
+    }
   }
 }

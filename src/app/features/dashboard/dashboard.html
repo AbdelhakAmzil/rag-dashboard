@@ -28,7 +28,11 @@
         </div>
       } @else {
         @for (msg of conversation.messages(); track $index) {
-          <app-message-bubble [message]="msg"></app-message-bubble>
+          <app-message-bubble
+            [message]="msg"
+            (regenerate)="onRegenerate(msg)"
+            (edit)="onEdit(msg, $event)">
+          </app-message-bubble>
         }
         @if (conversation.isLoading()) {
           <div class="message assistant-message">

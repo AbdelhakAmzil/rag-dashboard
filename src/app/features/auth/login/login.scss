@@ -10,17 +10,18 @@
 .auth-card {
   width: 100%;
   max-width: 380px;
-  padding: 32px;
+  padding: var(--space-lg);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   background-color: var(--bg-card);
+  box-shadow: var(--shadow-md);
 }
 
 .auth-logo {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 24px;
+  margin-bottom: var(--space-lg);
 }
 
 .auth-title {
@@ -33,13 +34,13 @@
 .auth-subtitle {
   font-size: 14px;
   color: var(--text-muted);
-  margin-bottom: 24px;
+  margin-bottom: var(--space-lg);
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-md);
 }
 
 .auth-label {
@@ -52,9 +53,9 @@
 }
 
 .auth-input {
-  padding: 10px 12px;
+  padding: var(--space-sm) 12px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background-color: var(--bg-main);
   color: var(--text-primary);
   font-size: 14px;
@@ -65,12 +66,11 @@
   }
 }
 
-
 .auth-submit-btn {
   margin-top: 4px;
   padding: 11px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--accent-gradient);
   color: var(--text-white);
   font-size: 14px;
@@ -84,7 +84,7 @@
 }
 
 .auth-switch {
-  margin-top: 20px;
+  margin-top: var(--space-lg);
   text-align: center;
   font-size: 13px;
   color: var(--text-muted);

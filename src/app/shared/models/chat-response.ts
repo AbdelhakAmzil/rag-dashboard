@@ -6,4 +6,5 @@ export interface ChatResponse {
   retrievedChunks: number;
   intent: string;
   model: string;
+  messageId: string;
 }

@@ -6,9 +6,29 @@
         <span class="sender">You</span>
         <span class="timestamp">{{ message().timestamp }}</span>
       </div>
-      <div class="message-text">
-        {{ message().text }}
-      </div>
+
+      @if (isEditing()) {
+        <textarea
+          class="edit-textarea"
+          [(ngModel)]="editText"
+          rows="3"></textarea>
+        <div class="edit-actions">
+          <button class="edit-btn edit-cancel" (click)="cancelEdit()">Cancel</button>
+          <button class="edit-btn edit-confirm" (click)="confirmEdit()">Save & regenerate</button>
+        </div>
+      } @else {
+        <div class="message-text">
+          {{ message().text }}
+        </div>
+        <div class="message-actions">
+          <button class="action-btn" (click)="onCopy()" title="Copy">
+            {{ justCopied() ? '✓' : '📋' }}
+          </button>
+          <button class="action-btn" (click)="startEdit()" title="Edit">
+            ✏️
+          </button>
+        </div>
+      }
     </div>
   </div>
 } @else {
@@ -27,6 +47,28 @@
           }
         </div>
       }
+      <div class="message-actions">
+        <button class="action-btn" (click)="onCopy()" title="Copy">
+          {{ justCopied() ? '✓' : '📋' }}
+        </button>
+        <button
+          class="action-btn"
+          [class.active]="feedback() === 'LIKE'"
+          (click)="onLike()"
+          title="Like">
+          👍
+        </button>
+        <button
+          class="action-btn"
+          [class.active]="feedback() === 'DISLIKE'"
+          (click)="onDislike()"
+          title="Dislike">
+          👎
+        </button>
+        <button class="action-btn" (click)="onRegenerate()" title="Regenerate">
+          🔄
+        </button>
+      </div>
     </div>
   </div>
 }

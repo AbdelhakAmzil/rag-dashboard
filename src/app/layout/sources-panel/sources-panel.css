@@ -1,6 +1,6 @@
 :host {
   display: block;
-  padding: 16px;
+  padding: var(--space-md);
   height: 100vh;
   overflow-y: auto;
   background-color: var(--bg-panel);
@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-md);
 }
 
 .panel-header h3 {
@@ -26,18 +26,19 @@
 
 .stats-row {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
 }
 
 .stat-card {
   flex: 1;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-sm);
 }
 
 .stat-value {
@@ -53,14 +54,14 @@
 }
 
 .section {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-lg);
 }
 
 .section h4 {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 10px;
+  margin-bottom: var(--space-sm);
 }
 
 .top-sources-list {
@@ -70,13 +71,13 @@
 .top-source-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-sm);
   padding: 8px 0;
 }
 
 .source-rank {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--text-muted);
   width: 16px;
 }
 
@@ -121,7 +122,7 @@
 }
 
 .detail-row {
-  margin-bottom: 12px;
+  margin-bottom: var(--space-sm);
 }
 
 .detail-label {
@@ -146,17 +147,17 @@
 .document-card {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   background: var(--bg-card);
 }
 
 .document-icon {
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;

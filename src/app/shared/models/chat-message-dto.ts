@@ -4,4 +4,5 @@ export interface ChatMessageDto {
   content: string;
   createdAt: string;
   sources: string[];
+  feedback: string | null;
 }

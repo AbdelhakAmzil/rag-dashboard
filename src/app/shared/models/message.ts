@@ -1,4 +1,5 @@
 export interface Message {
+  id?: string;
   role: 'user' | 'assistant';
   text: string;
   timestamp: string;
@@ -8,4 +9,5 @@ export interface Message {
   retrievedChunks?: number;
   intent?: string;
   model?: string;
+  feedback?: 'LIKE' | 'DISLIKE' | null;
 }

@@ -16,7 +16,23 @@
         class="conversation-item"
         [class.active]="conv.id === conversation.activeConversationId()"
         (click)="onSelectConversation(conv.id)">
-        {{ conv.title }}
+
+        @if (editingId() === conv.id) {
+          <input
+            class="rename-input"
+            [(ngModel)]="editingTitle"
+            (click)="$event.stopPropagation()"
+            (keyup.enter)="confirmRename(conv.id)"
+            (keyup.escape)="cancelRename()"
+            (blur)="confirmRename(conv.id)"
+            autofocus />
+        } @else {
+          <span class="conversation-title">{{ conv.title }}</span>
+          <div class="conversation-actions">
+            <button class="conv-action-btn" (click)="startRename(conv.id, conv.title, $event)" title="Rename">✏️</button>
+            <button class="conv-action-btn" (click)="onDelete(conv.id, $event)" title="Delete">🗑️</button>
+          </div>
+        }
       </li>
     }
   </ul>

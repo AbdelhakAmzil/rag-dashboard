@@ -19,6 +19,10 @@ export class ConversationApi {
     return this.http.get<ConversationDetail>(`${this.apiUrl}/${id}`);
   }
 
+  rename(id: string, title: string): Observable<ConversationSummary> {
+    return this.http.patch<ConversationSummary>(`${this.apiUrl}/${id}`, { title });
+  }
+
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

@@ -1,9 +1,9 @@
 .message {
   display: flex;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 10px;
-  margin-bottom: 16px;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
 }
 
 .user-message {
@@ -14,8 +14,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #e0e7ff;
-  color: #4338ca;
+  background-color: var(--bg-panel);
+  color: var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,12 +52,13 @@
 }
 
 .assistant-message {
-  background-color: var(--bg-main);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-sm);
 }
 
 .assistant-avatar {
-  background-color: #ede9fe;
-  color: #7c3aed;
+  background: var(--accent-gradient);
+  color: var(--text-white);
   font-size: 14px;
 }
 
@@ -75,16 +76,48 @@
 
 .sources-row {
   display: flex;
-  gap: 12px;
-  margin-top: 12px;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
   flex-wrap: wrap;
+}
+
+.message-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.message:hover .message-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.action-btn.active {
+  color: var(--accent-color);
+  background-color: var(--accent-bg-subtle);
+}
+
+.action-btn:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {
   .message {
-    padding: 12px;
-    gap: 8px;
-    margin-bottom: 12px;
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
   }
 
   .avatar {
@@ -148,15 +181,15 @@
 .markdown-body code {
   background-color: var(--bg-panel);
   padding: 2px 5px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-family: 'Courier New', monospace;
 }
 
 .markdown-body pre {
   background-color: var(--bg-panel);
-  padding: 10px;
-  border-radius: 8px;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
   overflow-x: auto;
   margin: 8px 0;
 }
@@ -164,4 +197,42 @@
 .markdown-body pre code {
   background: none;
   padding: 0;
+}
+
+.edit-textarea {
+  width: 100%;
+  border: 1px solid var(--accent-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 10px;
+  resize: vertical;
+  outline: none;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.edit-btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+}
+
+.edit-cancel {
+  background-color: var(--bg-panel);
+  color: var(--text-secondary);
+}
+
+.edit-confirm {
+  background: var(--accent-gradient);
+  color: var(--text-white);
 }

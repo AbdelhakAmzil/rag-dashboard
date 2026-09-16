@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -15,16 +15,16 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-md);
 }
 
 .share-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
+  padding: var(--space-xs) 14px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--bg-card);
   color: var(--text-primary);
   font-size: 14px;
@@ -79,7 +79,7 @@
 }
 
 .switch input:checked + .slider {
-  background-color: #6366f1;
+  background-color: var(--accent-color);
 }
 
 .switch input:checked + .slider::before {
@@ -88,7 +88,7 @@
 
 @media (max-width: 768px) {
   :host {
-    padding: 12px 16px 12px 60px; /* le padding-left évite que le titre passe sous le bouton hamburger fixe */
+    padding: 12px 16px 12px 60px;
     flex-wrap: wrap;
     gap: 8px;
   }
@@ -106,10 +106,10 @@
   }
 
   .share-btn span:not(.share-icon) {
-    display: none; /* cache le mot "Share", garde juste l'icône, pour gagner de la place */
+    display: none;
   }
 
   .sources-toggle span:first-child {
-    display: none; /* cache le mot "Sources", garde juste le toggle */
+    display: none;
   }
 }
