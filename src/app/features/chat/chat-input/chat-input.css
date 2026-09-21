@@ -3,11 +3,26 @@
   padding: 16px 24px 20px;
 }
 
+.input-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .input-container {
   border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 12px 14px;
-  background-color: var(--bg-main);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.input-container:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: var(--shadow-md);
 }
 
 .chat-textarea {
@@ -18,9 +33,14 @@
   font-size: 14px;
   font-family: inherit;
   min-height: 24px;
+  max-height: 160px;
   margin-bottom: 10px;
   background-color: transparent;
   color: var(--text-primary);
+}
+
+.chat-textarea::placeholder {
+  color: var(--text-muted);
 }
 
 .input-toolbar {
@@ -38,23 +58,70 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--bg-card);
   color: var(--text-secondary);
   font-size: 13px;
   cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.12s ease;
 }
 
 .tool-btn:hover {
-  background-color: var(--bg-panel);
+  background-color: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.tool-btn:active {
+  transform: translateY(0);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-select-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 8px);
+  background: var(--bg-card);
+  font-size: 13px;
+}
+
+.model-select {
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+}
+
+.mic-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
 }
 
 .send-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   border: none;
   background: var(--accent-gradient);
   color: white;
@@ -63,10 +130,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
-.send-btn:hover {
-  opacity: 0.9;
+.send-btn:hover:not(:disabled) {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.send-btn:active:not(:disabled) {
+  transform: scale(0.94);
 }
 
 .send-btn:disabled {
@@ -78,5 +152,67 @@
   text-align: center;
   font-size: 12px;
   color: var(--text-muted);
-  margin-top: 10px;
+  margin: 0;
+}
+
+.stop-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--danger-color);
+  font-size: 12px;
+}
+
+.stop-btn:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--danger-color);
+  transform: translateY(-1px) scale(1.05);
+}
+
+.stop-btn:active {
+  transform: scale(0.94);
+}
+
+.image-preview-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  width: fit-content;
+  max-width: 260px;
+}
+
+.preview-thumb {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.preview-name {
+  font-size: 12px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-remove-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  flex-shrink: 0;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.preview-remove-btn:hover {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
 }

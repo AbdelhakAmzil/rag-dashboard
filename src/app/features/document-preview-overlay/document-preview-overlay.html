@@ -1,0 +1,37 @@
+@if (preview.isLoading() || preview.current() || preview.errorMessage()) {
+  <div class="overlay-backdrop" (click)="onBackdropClick($event)">
+    <div class="overlay-panel">
+      <div class="overlay-header">
+        <span class="overlay-title">{{ preview.current()?.fileName ?? 'Aperçu du document' }}</span>
+        <div class="overlay-actions">
+          @if (preview.current(); as state) {
+            <a class="overlay-btn" [href]="state.objectUrl" [download]="state.fileName" title="Télécharger">⬇</a>
+          }
+          <button class="overlay-btn overlay-close" (click)="close()" title="Fermer">✕</button>
+        </div>
+      </div>
+
+      <div class="overlay-body">
+        @if (preview.isLoading()) {
+          <div class="overlay-state">
+            <div class="spinner"></div>
+            <p>Chargement du document…</p>
+          </div>
+        } @else if (preview.errorMessage(); as error) {
+          <div class="overlay-state">
+            <p class="overlay-error">{{ error }}</p>
+          </div>
+        } @else if (preview.current(); as state) {
+          @if (state.kind === 'pdf' || state.kind === 'text' || state.kind === 'html') {
+            <iframe [src]="safeUrl" class="overlay-iframe"></iframe>
+          } @else {
+            <div class="overlay-state">
+              <p>Aperçu non disponible pour ce type de fichier.</p>
+              <a class="overlay-download-link" [href]="state.objectUrl" [download]="state.fileName">Télécharger {{ state.fileName }}</a>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+}

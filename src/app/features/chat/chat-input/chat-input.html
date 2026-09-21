@@ -1,32 +1,70 @@
-<div class="input-container">
-  <textarea
-    class="chat-textarea"
-    placeholder="Ask anything about your documents..."
-    [(ngModel)]="questionText">
-  </textarea>
+<div class="input-shell">
+  <div class="input-container">
+    @if (attachedImagePreview()) {
+      <div class="image-preview-chip">
+        <img [src]="attachedImagePreview()" alt="Attached image preview" class="preview-thumb">
+        <span class="preview-name">{{ attachedImage()?.name }}</span>
+        <button class="preview-remove-btn" (click)="removeAttachedImage()" title="Remove image">✕</button>
+      </div>
+    }
 
-  <div class="input-toolbar">
-    <div class="toolbar-left">
-      <button class="tool-btn">
-        <span>📎</span> Attach
-      </button>
-      <input
-        type="file"
-        #fileInput
-        style="display: none"
-        (change)="onFileSelected($event)"
-        accept=".pdf,.docx,.txt,.html">
+    <textarea
+      class="chat-textarea"
+      rows="1"
+      placeholder="Ask anything about your documents..."
+      [(ngModel)]="questionText"
+      (keydown.enter)="onEnterKey($event)">
+    </textarea>
 
-      <button class="tool-btn" (click)="fileInput.click()">
-        <span>📁</span> Upload file
-      </button>
-      <button class="tool-btn">
-        <span>⚙️</span> Advanced
-      </button>
+    <div class="input-toolbar">
+      <div class="toolbar-left">
+        <input
+          type="file"
+          #imageInput
+          style="display: none"
+          (change)="onImageSelected($event)"
+          accept="image/*">
+
+        <button class="tool-btn" (click)="imageInput.click()" title="Attach an image">
+          <span>📎</span> Attach
+        </button>
+
+        <input
+          type="file"
+          #fileInput
+          style="display: none"
+          (change)="onFileSelected($event)"
+          accept=".pdf,.docx,.txt,.html">
+
+        <button class="tool-btn" (click)="fileInput.click()" title="Upload file">
+          <span>📁</span> Upload file
+        </button>
+
+        <div class="model-select-wrap" title="Model used for chat responses">
+          <span>⚙️</span>
+          <select class="model-select" [(ngModel)]="selectedModel">
+            <option value="ollama">Ollama (gpt-oss:120b)</option>
+            <option value="gemini">Google Gemini</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <button class="mic-btn" type="button" title="Voice input (coming soon)" disabled>
+          🎤
+        </button>
+        @if (conversation.isLoading()) {
+          <button class="send-btn stop-btn" (click)="onStop()" title="Stop generating">
+            ⬛
+          </button>
+        } @else {
+          <button class="send-btn" (click)="onSend()" [disabled]="!questionText.trim() && !attachedImage()" title="Send">
+            ➤
+          </button>
+        }
+      </div>
     </div>
-
-    <button class="send-btn" (click)="onSend()" [disabled]="conversation.isLoading()">➤</button>
   </div>
-</div>
 
-<p class="disclaimer">RAG Chatbot can make mistakes. Check important info.</p>
+  <p class="disclaimer">RAG Chatbot can make mistakes. Check important info.</p>
+</div>

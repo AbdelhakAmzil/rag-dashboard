@@ -5,8 +5,12 @@ import { Injectable, signal, effect } from '@angular/core';
 })
 export class UiState {
   isDarkMode = signal(false);
-  isSidebarOpen = signal(false);
-  isSourcesPanelOpen = signal(false);
+  isSidebarOpen = signal(this.getInitialState(768));
+  isSourcesPanelOpen = signal(this.getInitialState(1024));
+
+  private getInitialState(breakpoint: number): boolean {
+    return typeof window !== 'undefined' ? window.innerWidth > breakpoint : true;
+  }
 
   constructor() {
     effect(() => {

@@ -9,10 +9,12 @@
   border-radius: 10px;
   cursor: pointer;
   background-color: var(--bg-card);
+  transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
 .source-card:hover {
   background-color: var(--bg-panel);
+  transform: translateY(-1px);
 }
 
 .source-icon {

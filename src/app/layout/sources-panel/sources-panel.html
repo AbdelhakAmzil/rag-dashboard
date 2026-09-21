@@ -26,11 +26,13 @@
     <p class="no-documents">No documents uploaded yet.</p>
   } @else {
     <div class="document-cards">
-      @for (doc of documentUpload.uploadedDocuments(); track doc.fileName + '_' + doc.uploadedAt) {
-        <div class="document-card">
-          <div class="document-icon" [class]="getFileIconClass(doc.fileName)">
-            {{ getFileIcon(doc.fileName) }}
-          </div>
+      @for (doc of documentUpload.uploadedDocuments(); track doc.id) {
+        <div
+          class="document-card"
+          [class.not-previewable]="!doc.previewable"
+          (click)="openDocument(doc)"
+          [title]="doc.previewable ? 'Voir le contenu' : 'Aperçu indisponible'">
+          <span class="document-icon" [class]="getFileIconClass(doc.fileName)">{{ getFileIcon(doc.fileName) }}</span>
           <div class="document-info">
             <span class="document-name">{{ doc.fileName }}</span>
             <span class="document-meta">{{ doc.chunksIndexed }} chunks · {{ formatUploadedAt(doc.uploadedAt) }}</span>

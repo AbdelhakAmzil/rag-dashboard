@@ -6,32 +6,25 @@
   margin-bottom: var(--space-md);
 }
 
-.user-message {
-  background-color: var(--bg-message-user);
-}
-
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: var(--bg-panel);
-  color: var(--accent-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
+  object-fit: cover;
   flex-shrink: 0;
+  background-color: var(--bg-panel);
 }
 
 .message-content {
   flex: 1;
+  min-width: 0;
 }
 
 .message-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 6px;
+  gap: 8px;
 }
 
 .sender {
@@ -49,6 +42,32 @@
   font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.5;
+}
+
+.user-message .message-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: 0 1 auto;
+  max-width: 75%;
+  margin-left: auto;
+}
+
+.user-message .message-header {
+  flex-direction: row-reverse;
+  width: 100%;
+}
+
+.message-bubble {
+  background: var(--bg-message-user);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.user-message .message-actions {
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .assistant-message {
@@ -141,63 +160,6 @@
   }
 }
 
-.markdown-body p {
-  margin: 0 0 10px 0;
-  line-height: 1.5;
-}
-
-.markdown-body p:last-child {
-  margin-bottom: 0;
-}
-
-.markdown-body ul,
-.markdown-body ol {
-  margin: 8px 0;
-  padding-left: 22px;
-}
-
-.markdown-body li {
-  margin-bottom: 4px;
-  line-height: 1.5;
-}
-
-.markdown-body strong {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3 {
-  margin: 12px 0 6px 0;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.markdown-body h1 { font-size: 18px; }
-.markdown-body h2 { font-size: 16px; }
-.markdown-body h3 { font-size: 15px; }
-
-.markdown-body code {
-  background-color: var(--bg-panel);
-  padding: 2px 5px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-family: 'Courier New', monospace;
-}
-
-.markdown-body pre {
-  background-color: var(--bg-panel);
-  padding: var(--space-sm);
-  border-radius: var(--radius-sm);
-  overflow-x: auto;
-  margin: 8px 0;
-}
-
-.markdown-body pre code {
-  background: none;
-  padding: 0;
-}
 
 .edit-textarea {
   width: 100%;
@@ -236,3 +198,133 @@
   background: var(--accent-gradient);
   color: var(--text-white);
 }
+
+/* Entrée animée quand un nouveau message apparaît */
+.message {
+  animation: message-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Actions plus fluides à l'apparition au survol */
+.message-actions {
+  transform: translateY(2px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.message:hover .message-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Feedback tactile sur les boutons d'action */
+.action-btn {
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px) scale(1.05);
+}
+
+.action-btn:active {
+  transform: scale(0.92);
+}
+
+/* Effet "pop" quand like/dislike devient actif */
+.action-btn.active {
+  animation: action-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes action-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Halo subtil autour de l'avatar assistant */
+.assistant-avatar {
+  box-shadow: 0 0 0 3px var(--accent-bg-subtle);
+  transition: box-shadow 0.25s ease;
+}
+
+.message:hover .assistant-avatar {
+  box-shadow: 0 0 0 5px var(--accent-bg-subtle);
+}
+
+/* Sources qui apparaissent en cascade */
+.sources-row app-source-card {
+  animation: message-in 0.3s ease both;
+}
+
+.sources-row app-source-card:nth-child(2) { animation-delay: 0.05s; }
+.sources-row app-source-card:nth-child(3) { animation-delay: 0.1s; }
+.sources-row app-source-card:nth-child(4) { animation-delay: 0.15s; }
+
+/* Indicateur de chargement (3 points) dans la bulle assistant */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  animation: typing-bounce 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+.message-image-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
+}
+
+.message-image {
+  max-width: 240px;
+  max-height: 240px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+/*.markdown-body table {*/
+/*  border-collapse: collapse;*/
+/*  width: 100%;*/
+/*  margin: 10px 0;*/
+/*  font-size: 13px;*/
+/*  display: block;*/
+/*  overflow-x: auto;*/
+/*}*/
+
+/*.markdown-body th,*/
+/*.markdown-body td {*/
+/*  border: 1px solid var(--border-color);*/
+/*  padding: 6px 10px;*/
+/*  text-align: left;*/
+/*}*/
+
+/*.markdown-body th {*/
+/*  background-color: var(--bg-panel);*/
+/*  font-weight: 600;*/
+/*  color: var(--text-primary);*/
+/*}*/

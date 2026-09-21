@@ -1,6 +1,8 @@
 import { Component, inject, computed } from '@angular/core';
 import { DocumentUpload } from '../../core/services/document-upload';
 import { ConversationState } from '../../core/services/conversation-state';
+import { DocumentPreview } from '../../core/services/document-preview';
+import { UploadedDocument } from '../../shared/models/uploaded-document';
 
 @Component({
   selector: 'app-sources-panel',
@@ -10,6 +12,7 @@ import { ConversationState } from '../../core/services/conversation-state';
 })
 export class SourcesPanel {
   documentUpload = inject(DocumentUpload);
+  documentPreview = inject(DocumentPreview);
   private conversation = inject(ConversationState);
 
   lastAssistantMessage = computed(() => {
@@ -39,10 +42,19 @@ export class SourcesPanel {
   }
 
   formatUploadedAt(iso: string): string {
-    return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(iso).toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
   }
 
   formatResponseTime(ms: number): string {
-    return (ms / 1000).toFixed(1);
+    return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`;
+  }
+
+  openDocument(doc: UploadedDocument) {
+    if (!doc.previewable) return;
+    this.documentPreview.openById(doc.id, doc.fileName);
   }
 }

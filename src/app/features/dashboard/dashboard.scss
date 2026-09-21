@@ -1,18 +1,55 @@
 .app-shell {
   display: grid;
-  grid-template-columns: 260px 1fr 340px;
+  grid-template-columns: var(--sidebar-w, 260px) 1fr var(--sources-w, 340px);
+  transition: grid-template-columns 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100vh;
   width: 100%;
 }
 
+.glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-blob-1 {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  left: 15%;
+  background: var(--glow-accent-1);
+}
+
+.glow-blob-2 {
+  width: 380px;
+  height: 380px;
+  bottom: -140px;
+  right: 10%;
+  background: var(--glow-accent-2);
+}
+
+.sidebar, .chat-area, .sources-panel {
+  position: relative;
+  z-index: 1;
+}
+
 .sidebar {
   background-color: var(--bg-sidebar);
-  color: var(--text-white);
+  color: var(--text-sidebar);
+  border-right: 1px solid var(--border-color);
   padding: 16px;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow-y: auto;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.is-collapsed {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .chat-area {
@@ -34,10 +71,16 @@
   background-color: var(--bg-panel);
   padding: 16px;
   border-left: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.sources-panel.is-collapsed {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .hamburger-btn {
-  display: none;
   position: fixed;
   top: 16px;
   left: 16px;
@@ -49,13 +92,23 @@
   background: var(--bg-card);
   color: var(--text-primary);
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-// Tablette : on cache le panneau Sources
+.hamburger-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+// Tablette : le panneau Sources reste masqué, mais la sidebar garde son toggle
 @media (max-width: 1024px) {
   .app-shell {
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: var(--sidebar-w, 260px) 1fr;
   }
 
   .sources-panel {
@@ -69,10 +122,6 @@
     grid-template-columns: 1fr;
   }
 
-  .hamburger-btn {
-    display: block;
-  }
-
   .sidebar {
     position: fixed;
     top: 0;
@@ -80,12 +129,14 @@
     height: 100vh;
     width: 260px;
     z-index: 90;
+    opacity: 1; // sur mobile le fondu ne s'applique pas, seul le slide compte
     transform: translateX(-100%);
     transition: transform 0.25s ease;
   }
 
   .sidebar.sidebar-open {
     transform: translateX(0);
+    pointer-events: auto;
   }
 
   .chat-area {
@@ -110,7 +161,7 @@
   }
 
   .sources-panel {
-    display: none; /* caché par défaut sur mobile */
+    display: none;
   }
 
   .sources-panel.sources-open {
@@ -181,39 +232,4 @@
 
 .quick-action-icon {
   font-size: 18px;
-}
-
-.typing-indicator {
-  display: flex;
-  gap: 4px;
-  padding: 8px 0;
-
-  span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--text-muted);
-    animation: typing-bounce 1.4s infinite ease-in-out;
-  }
-
-  span:nth-child(1) {
-    animation-delay: 0s;
-  }
-  span:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  span:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-}
-
-@keyframes typing-bounce {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.4;
-  }
-  30% {
-    transform: translateY(-6px);
-    opacity: 1;
-  }
 }

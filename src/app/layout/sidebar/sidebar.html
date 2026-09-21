@@ -1,6 +1,9 @@
 <div class="sidebar-header">
-  <div class="logo-icon">🔷</div>
+  <img class="logo-icon" src="avatars/logo-emblem-64.png" alt="Espoir">
   <span class="logo-text">RAG Chatbot</span>
+  <button class="collapse-btn" (click)="uiState.toggleSidebar()" title="Collapse sidebar">
+    «
+  </button>
 </div>
 
 <button class="new-chat-btn" (click)="onNewChat()">
@@ -9,33 +12,36 @@
 </button>
 
 <div class="conversation-group">
-  <span class="group-label">Conversations</span>
-  <ul class="conversation-list">
-    @for (conv of conversation.conversations(); track conv.id) {
-      <li
-        class="conversation-item"
-        [class.active]="conv.id === conversation.activeConversationId()"
-        (click)="onSelectConversation(conv.id)">
+  @for (group of groupedConversations(); track group.label) {
+    <span class="group-label">{{ group.label }}</span>
+    <ul class="conversation-list">
+      @for (conv of group.items; track conv.id) {
+        <li
+          class="conversation-item"
+          [class.active]="conv.id === conversation.activeConversationId()"
+          (click)="onSelectConversation(conv.id)">
 
-        @if (editingId() === conv.id) {
-          <input
-            class="rename-input"
-            [(ngModel)]="editingTitle"
-            (click)="$event.stopPropagation()"
-            (keyup.enter)="confirmRename(conv.id)"
-            (keyup.escape)="cancelRename()"
-            (blur)="confirmRename(conv.id)"
-            autofocus />
-        } @else {
-          <span class="conversation-title">{{ conv.title }}</span>
-          <div class="conversation-actions">
-            <button class="conv-action-btn" (click)="startRename(conv.id, conv.title, $event)" title="Rename">✏️</button>
-            <button class="conv-action-btn" (click)="onDelete(conv.id, $event)" title="Delete">🗑️</button>
-          </div>
-        }
-      </li>
-    }
-  </ul>
+          @if (editingId() === conv.id) {
+            <input
+              class="rename-input"
+              [(ngModel)]="editingTitle"
+              (click)="$event.stopPropagation()"
+              (keyup.enter)="confirmRename(conv.id)"
+              (keyup.escape)="cancelRename()"
+              (blur)="confirmRename(conv.id)"
+              autofocus />
+          } @else {
+            <span class="conv-icon">💬</span>
+            <span class="conversation-title">{{ conv.title }}</span>
+            <div class="conversation-actions">
+              <button class="conv-action-btn" (click)="startRename(conv.id, conv.title, $event)" title="Rename">✏️</button>
+              <button class="conv-action-btn" (click)="onDelete(conv.id, $event)" title="Delete">🗑️</button>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  }
 </div>
 
 <div class="upgrade-card">
@@ -46,14 +52,6 @@
   <p class="upgrade-text">Unlock more tokens, larger file uploads and history.</p>
   <button class="upgrade-btn">Upgrade Now</button>
 </div>
-
-<button class="theme-toggle" (click)="uiState.toggleDarkMode()">
-  @if (uiState.isDarkMode()) {
-    ☀️ Light mode
-  } @else {
-    🌙 Dark mode
-  }
-</button>
 
 <div class="user-profile">
   <div class="avatar">AA</div>

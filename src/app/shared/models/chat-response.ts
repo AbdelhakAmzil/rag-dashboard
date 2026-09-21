@@ -7,4 +7,5 @@ export interface ChatResponse {
   intent: string;
   model: string;
   messageId: string;
+  userMessageId: string | null;
 }

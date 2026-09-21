@@ -203,4 +203,12 @@
 .document-meta {
   font-size: 12px;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+.document-card { cursor: pointer; }
+.document-card:hover { background-color: var(--bg-hover); }
+.document-card.not-previewable { cursor: default; opacity: 0.6; }
+.document-card.not-previewable:hover { background-color: transparent; }

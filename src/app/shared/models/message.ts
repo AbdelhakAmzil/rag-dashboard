@@ -10,4 +10,5 @@ export interface Message {
   intent?: string;
   model?: string;
   feedback?: 'LIKE' | 'DISLIKE' | null;
+  imageUrl?: string;
 }

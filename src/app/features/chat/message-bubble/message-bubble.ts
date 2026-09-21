@@ -14,6 +14,8 @@ import { MessageApi } from '../../../core/services/message-api';
   styleUrl: './message-bubble.css',
 })
 export class MessageBubble {
+  typing = input(false); // si tu utilises les signal inputs
+  // ou : @Input() typing = false; // si tu utilises @Input
   message = input.required<Message>();
   regenerate = output<void>();
   edit = output<string>();
@@ -38,10 +40,10 @@ export class MessageBubble {
     });
   }
 
-  renderedText = computed<SafeHtml>(() => {
-    const raw = this.message().text;
-    const html = marked.parse(raw, { breaks: true }) as string;
-    return this.sanitizer.bypassSecurityTrustHtml(html);
+  renderedText = computed<string>(() => {
+    const raw = this.message().text ?? '';
+    const clean = raw.replace(/【[^】]*(】|$)/g, '');
+    return marked.parse(clean, { breaks: true }) as string;
   });
 
   onCopy() {

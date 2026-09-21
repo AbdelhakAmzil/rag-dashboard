@@ -1,11 +1,20 @@
-<div class="app-shell">
-  <button class="hamburger-btn" (click)="uiState.toggleSidebar()">☰</button>
-  <aside class="sidebar" [class.sidebar-open]="uiState.isSidebarOpen()">
+<div
+  class="app-shell"
+  [style.--sidebar-w]="uiState.isSidebarOpen() ? '260px' : '0px'"
+  [style.--sources-w]="uiState.isSourcesPanelOpen() ? '340px' : '0px'">
+  <div class="glow-blob glow-blob-1"></div>
+  <div class="glow-blob glow-blob-2"></div>
+
+  @if (!uiState.isSidebarOpen()) {
+    <button class="hamburger-btn" (click)="uiState.toggleSidebar()" title="Show sidebar">☰</button>
+  }
+
+  <aside class="sidebar" [class.sidebar-open]="uiState.isSidebarOpen()" [class.is-collapsed]="!uiState.isSidebarOpen()">
     <app-sidebar></app-sidebar>
   </aside>
   <main class="chat-area">
     <app-chat-header></app-chat-header>
-    <div class="chat-messages">
+    <div class="chat-messages" #scrollAnchor (scroll)="onScroll($event)">
       @if (conversation.messages().length === 0) {
         <div class="empty-state">
           <h1 class="empty-title">Welcome to RAG Chatbot</h1>
@@ -30,27 +39,18 @@
         @for (msg of conversation.messages(); track $index) {
           <app-message-bubble
             [message]="msg"
+            [typing]="conversation.isLoading() && $last && !lastMessageHasContent()"
             (regenerate)="onRegenerate(msg)"
             (edit)="onEdit(msg, $event)">
           </app-message-bubble>
-        }
-        @if (conversation.isLoading()) {
-          <div class="message assistant-message">
-            <div class="avatar assistant-avatar">🔷</div>
-            <div class="message-content">
-              <div class="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
         }
       }
     </div>
     <app-chat-input></app-chat-input>
   </main>
-  <aside class="sources-panel" [class.sources-open]="uiState.isSourcesPanelOpen()">
+  <aside class="sources-panel" [class.sources-open]="uiState.isSourcesPanelOpen()" [class.is-collapsed]="!uiState.isSourcesPanelOpen()">
     <app-sources-panel></app-sources-panel>
   </aside>
 </div>
+
+<app-document-preview-overlay></app-document-preview-overlay>

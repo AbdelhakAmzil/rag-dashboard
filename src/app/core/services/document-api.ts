@@ -13,4 +13,14 @@ export class DocumentApi {
   list(): Observable<UploadedDocument[]> {
     return this.http.get<UploadedDocument[]>(this.apiUrl);
   }
+
+  getByFileName(fileName: string): Observable<UploadedDocument> {
+    return this.http.get<UploadedDocument>(
+      `${this.apiUrl}/by-name/${encodeURIComponent(fileName)}`,
+    );
+  }
+
+  getContentBlob(id: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id}/content`, { responseType: 'blob' });
+  }
 }
